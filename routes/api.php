@@ -12,3 +12,7 @@ Route::get('/user', function (Request $request) {
 Route::apiResource('kategoris', KategoriController::class);
 
 Route::apiResource('bukus', BukuController::class);
+
+Route::get('bukus/kategori/{kategori_id}', [BukuController::class, 'searchByKategori']);
+
+Route::get('bukus/judul/{judul}', [BukuController::class, 'searchByJudul']);

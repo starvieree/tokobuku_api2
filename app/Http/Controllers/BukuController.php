@@ -12,7 +12,21 @@ class BukuController extends Controller
      */
     public function index()
     {
-        return Buku::with('kategori')->get();
+        $buku = Buku::with('kategori')->get();
+        return response()->json([
+            'status' => true,
+            'message' => 'Data Buku berhasil ditampilkan',
+            'data' => $buku->map(function ($data) {
+                return [
+                    'id' => $data->id,
+                    'judul' => $data->judul,
+                    'penulis' => $data->penulis,
+                    'harga' => $data->harga,
+                    'stok' => $data->stok,
+                    'kategori_id' => $data->kategori->nama_kategori
+                ];
+            })
+        ]);
     }
 
     /**
@@ -34,6 +48,11 @@ class BukuController extends Controller
             'message' => 'Data Buku berhasil ditambahkan',
             'data' => $buku
         ], 200);
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Data Buku gagal ditambahkan'
+        ], 404);
     }
 
     /**
@@ -65,6 +84,11 @@ class BukuController extends Controller
             'message' => 'Data Buku berhasil diperbarui',
             'data' => $buku
         ], 200);
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Data Buku gagal diperbarui'
+        ], 404);
     }
 
     /**
@@ -77,5 +101,59 @@ class BukuController extends Controller
             'message' => 'Data Buku telah dihapus',
             'data' => $buku
         ], 204);
+    }
+
+    public function searchByKategori($kategori_id)
+    {
+        $buku = Buku::where('kategori_id', $kategori_id)->get();
+
+        if ($buku->isNotEmpty()) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Data Buku berhasil ditampilkan',
+                'data' => $buku->map(function ($data) {
+                    return [
+                        'id' => $data->id,
+                        'judul' => $data->judul,
+                        'penulis' => $data->penulis,
+                        'harga' => $data->harga,
+                        'stok' => $data->stok,
+                        'kategori_id' => $data->kategori->nama_kategori
+                    ];
+                })
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Data Buku tidak ditemukan'
+        ], 404);
+    }
+
+    public function searchByJudul($judul)
+    {
+        $buku = Buku::where('judul', 'like', '%' . $judul . '%')->get();
+
+        if ($buku->isNotEmpty()) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Data Buku berhasil ditampilkan',
+                'data' => $buku->map(function ($data) {
+                    return [
+                        'id' => $data->id,
+                        'judul' => $data->judul,
+                        'penulis' => $data->penulis,
+                        'harga' => $data->harga,
+                        'stok' => $data->stok,
+                        'kategori_id' => $data->kategori->nama_kategori
+                    ];
+                })
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Data Buku tidak ditemukan'
+        ], 404);
     }
 }

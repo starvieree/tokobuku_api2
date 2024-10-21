@@ -28,6 +28,11 @@ class KategoriController extends Controller
             'message' => 'Data Kategori berhasil ditambahkan',
             'data' => $kategori
         ], 200);
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Data Kategori gagal ditambahkan'
+        ], 404);
     }
 
     /**
@@ -55,6 +60,11 @@ class KategoriController extends Controller
             'message' => 'Data Kategori berhasil diperbarui',
             'data' => $kategori
         ], 200);
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Data Kategori gagal diperbarui'
+        ], 404);
     }
 
     /**
